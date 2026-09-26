@@ -1678,7 +1678,7 @@ export default function SettingsView({ onSaved }) {
               <a href="https://www.google.com/drive/download/" target="_blank" rel="noopener noreferrer"
                 style={{ color: 'var(--primary)', fontWeight: 600 }}>
                 Download Google Drive for Desktop
-              </a> (free from Google) and install it
+              </a> (available from Google) and install it
             </li>
             <li>Sign in with your Google account — a <strong>Google Drive (G:)</strong> folder appears on your PC</li>
             <li>Move your app's <strong>Saved Invoices</strong> folder into Google Drive, or set Windows to sync it</li>
