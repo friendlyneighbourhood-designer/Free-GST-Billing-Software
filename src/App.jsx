@@ -35,6 +35,7 @@ const PurchaseBills = lazy(() => import('./components/PurchaseBills'));
 const UserGuideView = lazy(() => import('./components/UserGuideView'));
 const ControlPanel = lazy(() => import('./components/ControlPanel'));
 import { getPrintSettings } from './utils/printSettings';
+import AuthGate from './components/AuthGate';
 
 // v1.10.4 — Lightweight Suspense fallback shown while a lazy view
 // downloads. Purely visual — no data fetching, no state.
@@ -289,40 +290,29 @@ function App() {
     setShowUpdateModal(false);
   };
 
-  // Check if server is running — continuously monitors
+  // Cloud deployment health check. Supabase is the backend; there is no local Express server.
   useEffect(() => {
     let cancelled = false;
-
-    const checkServer = async () => {
+    const checkCloud = async () => {
       try {
-        const res = await fetch('/api/profile', { signal: AbortSignal.timeout(3000) });
-        if (res.ok) {
-          if (cancelled) return;
-          setServerDown(false);
-          setServerStatus('online');
-          if (!profileLoaded.current) {
-            profileLoaded.current = true;
-            const p = await res.json();
-            setProfile(p);
-            if (!p.businessName && !localStorage.getItem('freegstbill_onboarded')) {
-              setShowWelcome(true);
-            }
-          }
-          return;
+        const p = await getProfile();
+        if (cancelled) return;
+        setServerDown(false);
+        setServerStatus('online');
+        if (!profileLoaded.current) {
+          profileLoaded.current = true;
+          setProfile(p);
+          if (!p?.businessName && !localStorage.getItem('freegstbill_onboarded')) setShowWelcome(true);
         }
-        throw new Error('not ok');
       } catch {
         if (!cancelled) {
-          setServerDown(true);
+          setServerDown(false);
           setServerStatus('offline');
         }
       }
     };
-
-    checkServer();
-    // Keep checking every 5 seconds (fast when down, normal heartbeat when up)
-    retryTimer.current = setInterval(checkServer, 5000);
-
+    checkCloud();
+    retryTimer.current = setInterval(checkCloud, 30000);
     return () => {
       cancelled = true;
       if (retryTimer.current) clearInterval(retryTimer.current);
@@ -1188,4 +1178,4 @@ function App() {
   );
 }
 
-export default App;
+export default function AppWithAuth() {\n  return <AuthGate><App /></AuthGate>;\n}\n
