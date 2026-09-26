@@ -651,7 +651,7 @@ function App() {
             The app just needs to be started once.
           </p>
           {/* v1.10.69 - there was an "Open GST Billing" button here, linking to
-              freegstbill://start. Only the old Install FreeGSTBill.bat ever
+              freegstbill://start. Only the old Install GSTBilling.bat ever
               registered that protocol, and it stopped shipping in v1.10.44, so
               on every current install the button did nothing at all. There is
               also nothing it could do: a web page cannot start a program, and
