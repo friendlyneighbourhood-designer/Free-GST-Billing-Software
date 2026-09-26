@@ -77,7 +77,7 @@ export default function UserGuideView() {
       const ensureSpace = (needed) => {
         if (y + needed > pageHeight - marginBottom) {
           pdf.setFontSize(8); pdf.setTextColor(150);
-          pdf.text(`Page ${pageNum} — Free GST Billing Software User Guide`, pageWidth / 2, pageHeight - 8, { align: 'center' });
+          pdf.text(`Page ${pageNum} — GST Billing Software User Guide`, pageWidth / 2, pageHeight - 8, { align: 'center' });
           pdf.addPage();
           pageNum += 1;
           y = marginTop;
@@ -99,7 +99,7 @@ export default function UserGuideView() {
       };
 
       // Cover-page-ish heading
-      writeWrapped('Free GST Billing Software', { size: 22, bold: true, color: [30, 64, 175] });
+      writeWrapped('GST Billing Software', { size: 22, bold: true, color: [30, 64, 175] });
       writeWrapped('User Guide — v1.4.0', { size: 12, color: [100, 116, 139] });
       writeWrapped(`Generated on ${new Date().toLocaleDateString()}. by DiceCodes — github.com/IamRamgarhia/Free-GST-Billing-Software`, { size: 9, color: [148, 163, 184] });
       y += 4;
@@ -169,9 +169,9 @@ export default function UserGuideView() {
 
       // Final-page footer
       pdf.setFontSize(8); pdf.setTextColor(150);
-      pdf.text(`Page ${pageNum} — Free GST Billing Software User Guide`, pageWidth / 2, pageHeight - 8, { align: 'center' });
+      pdf.text(`Page ${pageNum} — GST Billing Software User Guide`, pageWidth / 2, pageHeight - 8, { align: 'center' });
 
-      pdf.save('Free-GST-Billing-User-Guide.pdf');
+      pdf.save('GST-Billing-User-Guide.pdf');
       toast('User Guide PDF downloaded', 'success');
     } catch (err) {
       console.error(err);
