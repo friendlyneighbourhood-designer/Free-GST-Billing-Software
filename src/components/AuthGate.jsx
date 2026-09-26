@@ -11,11 +11,15 @@ export default function AuthGate({ children }) {
 
   useEffect(() => {
     let mounted = true;
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) console.error('Supabase session error:', error);
       if (mounted) {
-        setSession(data.session);
+        setSession(data?.session ?? null);
         setLoading(false);
       }
+    }).catch((error) => {
+      console.error('Supabase session network error:', error);
+      if (mounted) setLoading(false);
     });
     const { data: listener } = supabase.auth.onAuthStateChange((_event, next) => {
       setSession(next);
@@ -28,11 +32,23 @@ export default function AuthGate({ children }) {
     e.preventDefault();
     setMessage('');
     if (!email || !password) return setMessage('Enter your email and password.');
-    const result = mode === 'login'
-      ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password });
-    if (result.error) setMessage(result.error.message);
-    else if (mode === 'signup' && !result.data.session) setMessage('Account created. Check your email to confirm, then sign in.');
+    try {
+      const result = mode === 'login'
+        ? await supabase.auth.signInWithPassword({ email, password })
+        : await supabase.auth.signUp({ email, password });
+
+      if (result.error) {
+        setMessage(`${result.error.message} (Supabase Auth)`);
+        console.error('Supabase Auth error:', result.error);
+      } else if (mode === 'signup' && !result.data.session) {
+        setMessage('Account created. Check your email to confirm, then sign in.');
+      }
+    } catch (error) {
+      console.error('Supabase Auth network error:', error);
+      setMessage(
+        `Could not reach Supabase Auth. ${error?.message || 'Network request failed.'} Check the Supabase project URL/status.`
+      );
+    }
   };
 
   if (loading) return <div style={styles.center}>Loading secure billing workspace…</div>;
