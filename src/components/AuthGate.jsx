@@ -4,7 +4,6 @@ import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '../lib/supabas
 export default function AuthGate({ children }) {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -33,26 +32,11 @@ export default function AuthGate({ children }) {
     setMessage('');
     if (!email || !password) return setMessage('Enter your email and password.');
     try {
-      // First verify that the browser can reach Supabase and that the
-      // publishable key is accepted. This gives a useful error instead
-      // of the browser's generic "Failed to fetch".
-      const healthUrl = `${SUPABASE_URL}/auth/v1/health`;
-      const healthResponse = await fetch(healthUrl, { method: 'GET', mode: 'cors' });
-      const healthBody = await healthResponse.text();
-      if (!healthResponse.ok) {
-        setMessage(`Supabase Auth reachable (HTTP ${healthResponse.status}). ${healthBody.slice(0, 180)}`);
-        return;
-      }
-
-      const result = mode === 'login'
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password });
+      const result = await supabase.auth.signInWithPassword({ email, password });
 
       if (result.error) {
         setMessage(`${result.error.message} (Supabase Auth)`);
         console.error('Supabase Auth error:', result.error);
-      } else if (mode === 'signup' && !result.data.session) {
-        setMessage('Account created. Check your email to confirm, then sign in.');
       }
     } catch (error) {
       console.error('Supabase Auth network error:', error);
@@ -73,10 +57,7 @@ export default function AuthGate({ children }) {
         <input style={styles.input} type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" />
         <input style={styles.input} type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
         {message && <div style={styles.message}>{message}</div>}
-        <button style={styles.button} type="submit">{mode === 'login' ? 'Sign in' : 'Create account'}</button>
-        <button type="button" style={styles.link} onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); setMessage(''); }}>
-          {mode === 'login' ? 'Create a new account' : 'Already have an account? Sign in'}
-        </button>
+        <button style={styles.button} type="submit">Sign in</button>
       </form>
     </div>
   );
