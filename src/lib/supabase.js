@@ -6,8 +6,17 @@ const publishableKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY ||
   'sb_publishable_7D5nHlnx2biZhYtdz_BAyw_1O1SAAFL';
 
-if (!url || !publishableKey) {
-  console.warn('Supabase configuration is missing.');
-}
+export const supabase = createClient(url, publishableKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+  },
+  global: {
+    headers: {
+      apikey: publishableKey,
+    },
+  },
+});
 
-export const supabase = createClient(url, publishableKey);
+export { url as SUPABASE_URL, publishableKey as SUPABASE_PUBLISHABLE_KEY };
