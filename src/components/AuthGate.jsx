@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '../lib/supabase';
 
 export default function AuthGate({ children }) {
   const [session, setSession] = useState(null);
@@ -33,6 +33,19 @@ export default function AuthGate({ children }) {
     setMessage('');
     if (!email || !password) return setMessage('Enter your email and password.');
     try {
+      // First verify that the browser can reach Supabase and that the
+      // publishable key is accepted. This gives a useful error instead
+      // of the browser's generic "Failed to fetch".
+      const healthUrl = `${SUPABASE_URL}/auth/v1/health`;
+      const healthResponse = await fetch(healthUrl, {
+        headers: { apikey: SUPABASE_PUBLISHABLE_KEY },
+      });
+      if (!healthResponse.ok) {
+        const body = await healthResponse.text();
+        setMessage(`Supabase API error ${healthResponse.status}: ${body.slice(0, 180)}`);
+        return;
+      }
+
       const result = mode === 'login'
         ? await supabase.auth.signInWithPassword({ email, password })
         : await supabase.auth.signUp({ email, password });
