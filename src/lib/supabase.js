@@ -12,11 +12,6 @@ export const supabase = createClient(url, publishableKey, {
     persistSession: true,
     detectSessionInUrl: true,
   },
-  global: {
-    headers: {
-      apikey: publishableKey,
-    },
-  },
 });
 
 export { url as SUPABASE_URL, publishableKey as SUPABASE_PUBLISHABLE_KEY };
