@@ -55,7 +55,7 @@ export default function AuthGate({ children }) {
         <h1 style={{ marginTop: 0 }}>Free GST Billing</h1>
         <p style={{ color: '#64748b' }}>Sign in to access your billing data.</p>
         <input style={styles.input} type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" />
-        <input style={styles.input} type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
+        <input style={styles.input} type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" />
         {message && <div style={styles.message}>{message}</div>}
         <button style={styles.button} type="submit">Sign in</button>
       </form>
