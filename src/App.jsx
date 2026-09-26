@@ -1178,4 +1178,6 @@ function App() {
   );
 }
 
-export default function AppWithAuth() {\n  return <AuthGate><App /></AuthGate>;\n}\n
+export default function AppWithAuth() {
+  return <AuthGate><App /></AuthGate>;
+}
