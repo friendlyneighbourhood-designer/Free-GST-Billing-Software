@@ -37,12 +37,10 @@ export default function AuthGate({ children }) {
       // publishable key is accepted. This gives a useful error instead
       // of the browser's generic "Failed to fetch".
       const healthUrl = `${SUPABASE_URL}/auth/v1/health`;
-      const healthResponse = await fetch(healthUrl, {
-        headers: { apikey: SUPABASE_PUBLISHABLE_KEY },
-      });
+      const healthResponse = await fetch(healthUrl, { method: 'GET', mode: 'cors' });
+      const healthBody = await healthResponse.text();
       if (!healthResponse.ok) {
-        const body = await healthResponse.text();
-        setMessage(`Supabase API error ${healthResponse.status}: ${body.slice(0, 180)}`);
+        setMessage(`Supabase Auth reachable (HTTP ${healthResponse.status}). ${healthBody.slice(0, 180)}`);
         return;
       }
 
