@@ -128,7 +128,7 @@ export default function ControlPanel() {
         <ActionCard
           icon={<Download size={22} />}
           title="Backup Data"
-          body="Zips your data folder into ~/Documents/FreeGSTBill Backups/ with a timestamp."
+          body="Zips your data folder into ~/Documents/GSTBilling Backups/ with a timestamp."
           buttonLabel={busy === 'backup' ? 'Backing up…' : 'Create Backup'}
           disabled={!!busy || scriptsUnavailable}
           onClick={() => runAction('backup')}
@@ -160,7 +160,7 @@ export default function ControlPanel() {
         <ActionCard
           icon={<FolderOpen size={22} />}
           title="Open Backups Folder"
-          body="Opens ~/Documents/FreeGSTBill Backups/ where every automatic and manual backup ZIP is stored."
+          body="Opens ~/Documents/GSTBilling Backups/ where every automatic and manual backup ZIP is stored."
           buttonLabel="Open"
           disabled={!!busy}
           onClick={() => runAction('open-backups-folder')}
