@@ -645,7 +645,7 @@ function App() {
       <div className="server-down-overlay">
         <div className="server-down-modal">
           <FileText size={48} color="#3b82f6" />
-          <h2>Free GST Billing Software Needs a Quick Start</h2>
+          <h2>GST Billing Software Needs a Quick Start</h2>
           <p>
             Your data is <strong>100% safe</strong> on your computer — nothing is lost.
             The app just needs to be started once.
@@ -661,8 +661,8 @@ function App() {
           <div className="server-down-steps">
             <p className="server-down-hint">How to start it:</p>
             <ol>
-              <li>Double-click <strong>Free GST Billing</strong> on your Desktop, then click <strong>Open App</strong></li>
-              <li>Or search <strong>"Free GST Billing"</strong> in the Start Menu</li>
+              <li>Double-click <strong>GST Billing</strong> on your Desktop, then click <strong>Open App</strong></li>
+              <li>Or search <strong>"GST Billing"</strong> in the Start Menu</li>
             </ol>
           </div>
           <p className="server-down-safe">All your invoices, clients, and data are safely stored on your computer. They are never deleted or shared.</p>
